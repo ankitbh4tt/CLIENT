@@ -11,7 +11,7 @@ const Dashboard = ({recentTransactions  }) => {
     return (
         <div className="flex-1 flex flex-col">
             {/* Top Bar */}
-            <Topbar/>
+            <Topbar username={'Ankit'}/>
             {/* Main */}
             <main className="p-4 space-y-6">
                 {/* Summary Cards */}
