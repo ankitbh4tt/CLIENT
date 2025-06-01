@@ -3,6 +3,8 @@ import App from "./App";
 import ProtectedRoutes from "./components/auth/ProtectedRoutes";
 import FinanceTrackerHome from "./pages/ExpensePage";
 import NotFound from "./components/error/NotFound";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +19,14 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <NotFound />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
   },
 ]);
 
