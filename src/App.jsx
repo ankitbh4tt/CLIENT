@@ -4,12 +4,25 @@ import { Route, RouterProvider, Routes } from "react-router-dom";
 import ExpensePage from "./pages/ExpensePage";
 import router from "./Router";
 import { Toaster } from "react-hot-toast";
+import LoadingProvider, { useLoading } from "./context/loadingContext";
+import { useEffect } from "react";
+import { injectLoadingSetter } from "./utils/axios";
 
 function App() {
+  const { loading, setLoading } = useLoading();
+
+  useEffect(() => {
+    injectLoadingSetter(setLoading);
+  }, [setLoading]);
   return (
     <>
-      <Toaster position="top-right" />
-      <RouterProvider router={router} />
+      {loading && <p>Loading...</p>}
+      <>
+        <Toaster position="top-right" />
+        <LoadingProvider>
+          <RouterProvider router={router} />
+        </LoadingProvider>
+      </>
     </>
     // <div className="bg-red-200 min-h-screen">
     //   {/* <Todos/> */}
