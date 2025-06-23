@@ -1,7 +1,12 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { userLoginSchema } from "@/validation/authValidator";
+import API from "@/utils/axios";
+import toast from "react-hot-toast";
+
+// BACKEND URL
+const BACKEND_URI = import.meta.env.VITE_BACKEND_URI;
 
 export default function Login() {
   const {
@@ -11,10 +16,20 @@ export default function Login() {
   } = useForm({
     resolver: zodResolver(userLoginSchema),
   });
+  const navigate = useNavigate();
 
-  const handleLogin = async (data) => {
+  const handleLogin = async (formData) => {
     try {
-      console.log(data);
+      console.log(formData);
+      const response = await API.post(`${BACKEND_URI}/user/login`, formData);
+      const { data } = response;
+      if (data) {
+        console.log(data);
+        toast.success(data?.message);
+        const token = data.token;
+        localStorage.setItem("token", token);
+        navigate("/");
+      }
     } catch (error) {
       console.error(error);
     }
