@@ -2,7 +2,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const API = axios.create({
-  baseURL: import.meta.env.BACKEND_URI,
+  baseURL: import.meta.env.VITE_BACKEND_URI,
 });
 
 let setGlobalLoading = null;
@@ -14,7 +14,7 @@ export const injectLoadingSetter = (setLoadingFunc) => {
 API.interceptors.request.use(
   (config) => {
     if (setGlobalLoading) setGlobalLoading(true);
-    const token = sessionStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `bearer ${token}`;
     }
@@ -28,15 +28,17 @@ API.interceptors.request.use(
 
 API.interceptors.response.use(
   (response) => {
-    if (setGlobalLoading) setGlobalLoading(true);
+    if (setGlobalLoading) setGlobalLoading(false);
     return response;
   },
   (error) => {
-    if (error.response.status === 401) {
-      toast.error("Unauthorized access!!");
-      window.location.href = "/login";
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
     }
+    alert(error.response?.status);
+
     if (setGlobalLoading) setGlobalLoading(false);
+
     toast.error(
       error.response?.data?.message ||
         error.response?.data?.error ||
@@ -46,4 +48,5 @@ API.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 export default API;
