@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
         return;
       }
       try {
-        const response = API.get(
+        const response = await API.get(
           `${import.meta.env.VITE_BACKEND_URI}/user/check-session`,
           {
             headers: {
@@ -26,14 +26,14 @@ export const AuthProvider = ({ children }) => {
             },
           }
         );
-        console.log(response.data);
         setUser(response.data?.user);
         setIsLoggedIn(true);
       } catch (error) {
         console.error(error);
-        toast.error("Please logged in again!");
+        toast.error("Please log in again!");
         localStorage.removeItem("token");
-        window.location.href = "/login";
+
+        setIsLoggedIn(false); // ✅ let ProtectedRoutes handle the redirect
       } finally {
         setIsChecking(false);
       }
