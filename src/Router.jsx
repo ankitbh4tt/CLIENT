@@ -1,24 +1,20 @@
 import { createBrowserRouter } from "react-router-dom";
-import App from "./App";
-import ProtectedRoutes from "./components/auth/ProtectedRoutes";
 import FinanceTrackerHome from "./pages/ExpensePage";
 import NotFound from "./components/error/NotFound";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ProtectedOutlet from "./layout/ProtectedLayout"; // 👈 Only outlet now
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <ProtectedRoutes>
-        <FinanceTrackerHome />
-      </ProtectedRoutes>
-    ),
-    children: [],
-  },
-  {
-    path: "*",
-    element: <NotFound />,
+    element: <ProtectedOutlet />,
+    children: [
+      {
+        path: "",
+        element: <FinanceTrackerHome />,
+      },
+    ],
   },
   {
     path: "/login",
@@ -27,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <RegisterPage />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 
