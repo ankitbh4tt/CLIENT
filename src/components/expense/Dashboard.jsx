@@ -1,14 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Wallet,
-  ArrowUpRight,
-  ArrowDownRight,
-  Home,
-  TrendingUp,
-  PieChart,
-  Cog,
-  Plus,
-} from "lucide-react";
+import { Plus } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -16,6 +7,7 @@ import Topbar from "./Topbar";
 import API from "@/utils/axios";
 import toast from "react-hot-toast";
 import { useAuthContext } from "@/context/AuthContext";
+import getCurrentMonthDateParams from "@/utils/generateCurMonthDates";
 
 const categoryIcons = {
   FOOD: "🍔",
@@ -28,18 +20,6 @@ const categoryIcons = {
 };
 const RUPEE_SIGN = "₹";
 const BACKEND = import.meta.env.VITE_BACKEND_URI;
-
-// Helper function
-const getCurrentMonthDateParams = () => {
-  const now = new Date();
-  const startDate = new Date(now.getFullYear(), now.getMonth(), 1)
-    .toISOString()
-    .split("T")[0];
-  const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0)
-    .toISOString()
-    .split("T")[0];
-  return { startDate, endDate };
-};
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState([]);
