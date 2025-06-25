@@ -9,40 +9,49 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isChecking, setIsChecking] = useState(true);
 
-  useEffect(() => {
-    const checkSession = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error("You are not logged in!");
-        setIsChecking(false);
-        return;
-      }
-      try {
-        const response = await API.get(
-          `${import.meta.env.VITE_BACKEND_URI}/user/check-session`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setUser(response.data?.user);
-        setIsLoggedIn(true);
-      } catch (error) {
-        console.error(error);
-        toast.error("Please log in again!");
-        localStorage.removeItem("token");
+  const checkSession = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("You are not logged in!");
+      setIsChecking(false);
+      return;
+    }
+    try {
+      const response = await API.get(
+        `${import.meta.env.VITE_BACKEND_URI}/user/check-session`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setUser(response.data?.user);
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.error(error);
+      toast.error("Please log in again!");
+      localStorage.removeItem("token");
+      setIsLoggedIn(false);
+    } finally {
+      setIsChecking(false);
+    }
+  };
 
-        setIsLoggedIn(false); // ✅ let ProtectedRoutes handle the redirect
-      } finally {
-        setIsChecking(false);
-      }
-    };
-    checkSession();
+  useEffect(() => {
+    checkSession(); // Run on mount
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, isChecking }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isLoggedIn,
+        isChecking,
+        checkSession,
+        setIsLoggedIn,
+        setUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
