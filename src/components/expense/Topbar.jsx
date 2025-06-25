@@ -1,16 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "@/context/AuthContext";
 
 const Topbar = ({ username }) => {
   const [isUserMenuOpened, setIsUserMenuOpened] = useState(false);
-  const navigate = useNavigate();
   const popoverRef = useRef();
   const handleUserAvatarClick = () => {
     setIsUserMenuOpened((prev) => !prev);
   };
-  const handleLogoutClick = () => {
-    navigate("/logout");
+  const { setUser, setIsLoggedIn } = useAuthContext();
+  const handleLogoutClick = async () => {
+    setUser(null);
+    setIsLoggedIn(false);
+    localStorage.removeItem("token");
   };
 
   useEffect(() => {
