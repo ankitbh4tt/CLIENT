@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { userLoginSchema } from "@/validation/authValidator";
 import API from "@/utils/axios";
 import toast from "react-hot-toast";
+import { useAuthContext } from "@/context/AuthContext";
 
 // BACKEND URL
 const BACKEND_URI = import.meta.env.VITE_BACKEND_URI;
@@ -17,6 +18,7 @@ export default function Login() {
     resolver: zodResolver(userLoginSchema),
   });
   const navigate = useNavigate();
+  const { checkSession } = useAuthContext();
 
   const handleLogin = async (formData) => {
     try {
@@ -24,11 +26,12 @@ export default function Login() {
       const response = await API.post(`${BACKEND_URI}/user/login`, formData);
       const { data } = response;
       if (data) {
-        console.log(data);
-        toast.success(data?.message);
         const token = data.token;
         localStorage.setItem("token", token);
-        navigate("/");
+        console.log(data);
+        toast.success(data?.message);
+        await checkSession();
+        navigate("/home/dashboard");
       }
     } catch (error) {
       console.error(error);

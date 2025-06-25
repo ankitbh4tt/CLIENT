@@ -7,7 +7,7 @@ import ProtectedOutlet from "./layout/ProtectedLayout"; // 👈 Only outlet now
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/home/dashboard",
     element: <ProtectedOutlet />,
     children: [
       {

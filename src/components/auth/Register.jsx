@@ -4,9 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userRegisterSchema } from "@/validation/authValidator";
 import API from "@/utils/axios";
 import toast from "react-hot-toast";
+import { useAuthContext } from "@/context/AuthContext";
 
 export default function Register() {
   const BACKEND_URI = import.meta.env.VITE_BACKEND_URI;
+  const { checkSession } = useAuthContext();
   const {
     register,
     handleSubmit,
@@ -25,7 +27,8 @@ export default function Register() {
         toast.success(data?.message);
         const token = data.token;
         localStorage.setItem("token", token);
-        navigate("/");
+        await checkSession();
+        navigate("/home/dashboard");
       }
     } catch (error) {
       console.error(error);
