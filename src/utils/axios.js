@@ -35,7 +35,6 @@ API.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem("token");
     }
-    alert(error.response?.status);
 
     if (setGlobalLoading) setGlobalLoading(false);
 
