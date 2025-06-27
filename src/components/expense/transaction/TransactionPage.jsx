@@ -11,7 +11,6 @@ const TransactionPage = () => {
   const [activeTab, setActiveTab] = useState("income");
   // const [loading,setLoading] = useState()
   const [transactions, setTransations] = useState([]);
-  const [summary, setSummary] = useState({});
   const [filteredTransactions, setFilteredTransactions] = useState([]);
 
   const fetchAllTransactions = async () => {
@@ -26,7 +25,6 @@ const TransactionPage = () => {
         return;
       }
       setTransations(data.expenses);
-      setSummary(data.expenseSummary);
     } catch (error) {
       console.error(error);
       toast.error(error.message || error.error || "Something went wrong");
